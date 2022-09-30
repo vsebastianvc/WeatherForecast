@@ -1,6 +1,5 @@
 package com.vsebastianvc.weatherforecast.widgets
 
-import android.content.Context
 import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -12,14 +11,12 @@ import androidx.compose.material.icons.rounded.MoreVert
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -29,7 +26,6 @@ import com.vsebastianvc.weatherforecast.model.Favorite
 import com.vsebastianvc.weatherforecast.navigation.WeatherScreens
 import com.vsebastianvc.weatherforecast.screens.favorites.FavoriteViewModel
 
-//@Preview
 @Composable
 fun WeatherAppBar(
     title: String = "Title",
@@ -45,10 +41,6 @@ fun WeatherAppBar(
         mutableStateOf(false)
     }
 
-    val showIt = remember {
-        mutableStateOf(false)
-    }
-
     val context = LocalContext.current
 
     if (showDialog.value) {
@@ -60,7 +52,7 @@ fun WeatherAppBar(
             Text(
                 text = title,
                 color = MaterialTheme.colors.onSecondary,
-                style = TextStyle(fontWeight = FontWeight.Bold, fontSize = 15.sp)
+                style = TextStyle(fontWeight = FontWeight.Bold, fontSize = 16.sp)
             )
         },
         actions = {
@@ -98,24 +90,31 @@ fun WeatherAppBar(
                         contentDescription = "Favorite Icon",
                         modifier = Modifier
                             .scale(0.9f)
+                            .padding(start = 8.dp)
                             .clickable {
                                 val dataList = title.split(",")
-                                favoriteViewModel.insertFavorite(
-                                    Favorite(
-                                        city = dataList[0],
-                                        country = dataList[1]
+                                favoriteViewModel
+                                    .insertFavorite(
+                                        Favorite(
+                                            city = dataList[0],
+                                            country = dataList[1]
+                                        )
                                     )
-                                ).run {
-                                    showIt.value = true
-                                }
+                                    .run {
+                                        Toast
+                                            .makeText(
+                                                context,
+                                                "Added To Favorites",
+                                                Toast.LENGTH_SHORT
+                                            )
+                                            .show()
+                                    }
                             },
                         tint = Color.Red.copy(alpha = 0.6f)
                     )
                 } else {
-                    showIt.value = false
                     Box {}
                 }
-
 
             }
         },
@@ -124,18 +123,12 @@ fun WeatherAppBar(
     )
 }
 
-fun showToast(context: Context, showIt: MutableState<Boolean>) {
-    if (showIt.value) {
-        Toast.makeText(context, "Added To Favorites", Toast.LENGTH_SHORT).show()
-    }
-}
-
 @Composable
 fun ShowSettingDropDownMenu(showDialog: MutableState<Boolean>, navController: NavController) {
     var expanded by remember {
         mutableStateOf(true)
     }
-    val items = listOf("About", "Favorites", "Settings")
+    val items = listOf("Favorites", "Settings", "About")
 
     Column(
         modifier = Modifier
@@ -150,30 +143,32 @@ fun ShowSettingDropDownMenu(showDialog: MutableState<Boolean>, navController: Na
                 .width(140.dp)
                 .background(Color.White)
         ) {
-            items.forEachIndexed { index, text ->
+            items.forEachIndexed { _, text ->
                 DropdownMenuItem(onClick = {
                     expanded = false
                     showDialog.value = false
                 }) {
                     Icon(
                         imageVector = when (text) {
-                            "About" -> Icons.Default.Info
                             "Favorites" -> Icons.Default.FavoriteBorder
-                            else -> Icons.Default.Settings
+                            "Settings" -> Icons.Default.Settings
+                            else -> Icons.Default.Info
                         }, contentDescription = null,
                         tint = Color.LightGray
                     )
                     Text(
                         text = text,
-                        modifier = Modifier.clickable {
-                            navController.navigate(
-                                when (text) {
-                                    "About" -> WeatherScreens.AboutScreen.name
-                                    "Favorites" -> WeatherScreens.FavoriteScreen.name
-                                    else -> WeatherScreens.SettingsScreen.name
-                                }
-                            )
-                        },
+                        modifier = Modifier
+                            .padding(start = 5.dp)
+                            .clickable {
+                                navController.navigate(
+                                    when (text) {
+                                        "Favorites" -> WeatherScreens.FavoriteScreen.name
+                                        "Settings" -> WeatherScreens.SettingsScreen.name
+                                        else -> WeatherScreens.AboutScreen.name
+                                    }
+                                )
+                            },
                         fontWeight = FontWeight.W300
                     )
                 }

@@ -23,11 +23,7 @@ class FavoriteViewModel @Inject constructor(private val repository: WeatherDbRep
     init {
         viewModelScope.launch(Dispatchers.IO) {
             repository.getFavorites().distinctUntilChanged().collect { listOfFavs ->
-                if (listOfFavs.isNullOrEmpty()) {
-
-                } else {
-                    _favList.value = listOfFavs
-                }
+                _favList.value = listOfFavs
             }
         }
     }

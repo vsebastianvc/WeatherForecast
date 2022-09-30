@@ -1,6 +1,7 @@
 package com.vsebastianvc.weatherforecast.di
 
 import android.content.Context
+import android.content.SharedPreferences
 import androidx.room.Room
 import com.vsebastianvc.weatherforecast.data.WeatherDao
 import com.vsebastianvc.weatherforecast.data.WeatherDatabase
@@ -38,5 +39,11 @@ class AppModule {
             .addConverterFactory(GsonConverterFactory.create())
             .build()
             .create(WeatherApi::class.java)
+    }
+
+    @Singleton
+    @Provides
+    fun provideSharedPreference(@ApplicationContext context: Context): SharedPreferences {
+        return context.getSharedPreferences(Constants.SHARED_PREFS_FILE_KEY, Context.MODE_PRIVATE)
     }
 }

@@ -1,6 +1,7 @@
 package com.vsebastianvc.weatherforecast.screens.splash
 
 import android.view.animation.OvershootInterpolator
+import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
@@ -21,17 +22,18 @@ import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.vsebastianvc.weatherforecast.R
 import com.vsebastianvc.weatherforecast.navigation.WeatherScreens
+import com.vsebastianvc.weatherforecast.utils.Constants
 import kotlinx.coroutines.delay
 
 @Composable
 fun WeatherSplashScreen(navController: NavController) {
-    val defaultCity = "Toronto"
     val scale = remember {
-        androidx.compose.animation.core.Animatable(0f)
+       Animatable(0f)
     }
 
     LaunchedEffect(key1 = true, block = {
@@ -42,7 +44,7 @@ fun WeatherSplashScreen(navController: NavController) {
             }
         ))
         delay(2000L)
-        navController.navigate(WeatherScreens.MainScreen.name + "/$defaultCity")
+        navController.navigate(WeatherScreens.MainScreen.name + "/${Constants.DEFAULT_CITY}")
     })
     Surface(
         modifier = Modifier
@@ -62,13 +64,13 @@ fun WeatherSplashScreen(navController: NavController) {
             verticalArrangement = Arrangement.Center
         ) {
             Image(
-                painter = painterResource(id = R.drawable.sun),
+                painter = painterResource(id = R.drawable.ic_splash),
                 contentDescription = "sunny icon",
                 contentScale = ContentScale.Fit,
                 modifier = Modifier.size(95.dp)
             )
             Text(
-                text = "Find the sun?",
+                text = stringResource(id = R.string.app_name),
                 style = MaterialTheme.typography.h5,
                 color = Color.LightGray
             )

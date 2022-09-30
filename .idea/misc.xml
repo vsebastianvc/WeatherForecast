@@ -5,6 +5,15 @@
       <map>
         <entry key="../../../../../../layout/compose-model-1663776899527.xml" value="0.34881756756756754" />
         <entry key="../../../../../../layout/compose-model-1663862807024.xml" value="0.34881756756756754" />
+        <entry key="../../../../../../layout/compose-model-1664215410432.xml" value="0.33" />
+        <entry key="../../../../../../layout/compose-model-1664218714676.xml" value="0.33" />
+        <entry key="../../../../../../layout/compose-model-1664220386166.xml" value="0.34881756756756754" />
+        <entry key="../../../../../../layout/compose-model-1664225705757.xml" value="0.9" />
+        <entry key="../../../../../../layout/compose-model-1664426743954.xml" value="1.0" />
+        <entry key="app/src/main/res/drawable/ic_humidity.xml" value="0.2285" />
+        <entry key="app/src/main/res/drawable/ic_no_favorite.xml" value="0.286" />
+        <entry key="app/src/main/res/drawable/ic_pressure.xml" value="0.2285" />
+        <entry key="app/src/main/res/drawable/ic_wind.xml" value="0.2285" />
       </map>
     </option>
   </component>

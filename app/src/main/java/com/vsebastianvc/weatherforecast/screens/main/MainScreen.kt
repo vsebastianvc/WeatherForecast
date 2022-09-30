@@ -31,9 +31,9 @@ fun MainScreen(
     settingsViewModel: SettingsViewModel = hiltViewModel(),
     city: String?
 ) {
-    val curCity: String = if(city!!.isBlank()) "Toronto" else city
+    val curCity: String = if (city!!.isBlank()) "Toronto" else city
 
-    val unitFromDb = settingsViewModel.unitList.collectAsState().value
+    val unitFromCache = settingsViewModel.getUnit()
 
     var unit by remember {
         mutableStateOf("metric")
@@ -43,9 +43,9 @@ fun MainScreen(
         mutableStateOf(false)
     }
 
-    if(!unitFromDb.isNullOrEmpty()){
+    if (!unitFromCache.isNullOrEmpty()) {
 
-        unit = unitFromDb[0].unit.split(" ")[0].lowercase()
+        unit = unitFromCache.split(" ")[0].lowercase()
         isMetric = unit == "metric"
 
         val weatherData = produceState<DataOrException<Weather, Boolean, Exception>>(
@@ -55,14 +55,28 @@ fun MainScreen(
         }.value
 
         if (weatherData.loading == true) {
-            CircularProgressIndicator()
+            Loading()
         } else if (weatherData.data != null) {
             MainScaffold(weather = weatherData.data!!, navController, isMetric = isMetric)
         }
     }
 
 
+}
 
+@Composable
+fun Loading() {
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .fillMaxWidth(),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center
+    ) {
+        Spacer(modifier = Modifier.weight(1f))
+        CircularProgressIndicator()
+        Spacer(modifier = Modifier.weight(1f))
+    }
 }
 
 @Composable
@@ -104,7 +118,7 @@ fun MainContent(data: Weather, isMetric: Boolean) {
         Surface(
             modifier = Modifier
                 .padding(4.dp)
-                .size(200.dp), shape = CircleShape,
+                .size(180.dp), shape = CircleShape,
             color = Color(0xFFFFC400)
         ) {
             Column(
@@ -136,7 +150,7 @@ fun MainContent(data: Weather, isMetric: Boolean) {
             modifier = Modifier
                 .fillMaxWidth()
                 .fillMaxHeight(),
-            color = Color(0xFFEEF1EF),
+            color = Color.White,
             shape = RoundedCornerShape(size = 14.dp)
         ) {
             LazyColumn(modifier = Modifier.padding(2.dp), contentPadding = PaddingValues(1.dp)) {

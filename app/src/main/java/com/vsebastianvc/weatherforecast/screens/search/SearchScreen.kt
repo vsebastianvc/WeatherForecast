@@ -21,10 +21,12 @@ import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import com.vsebastianvc.weatherforecast.R
 import com.vsebastianvc.weatherforecast.navigation.WeatherScreens
 import com.vsebastianvc.weatherforecast.widgets.WeatherAppBar
 
@@ -75,7 +77,8 @@ fun SearchBar(
     Column() {
         CommonTextField(
             valueState = searchQueryState,
-            placeholder = "Seattle",
+            label = stringResource(R.string.find_location),
+            placeholder = stringResource(R.string.e_g_toronto),
             onAction = KeyboardActions {
                 if (!valid) {
                     return@KeyboardActions
@@ -92,6 +95,7 @@ fun SearchBar(
 @Composable
 fun CommonTextField(
     valueState: MutableState<String>,
+    label: String,
     placeholder: String,
     keyboardType: KeyboardType = KeyboardType.Text,
     imeAction: ImeAction = ImeAction.Next,
@@ -100,7 +104,8 @@ fun CommonTextField(
     OutlinedTextField(
         value = valueState.value,
         onValueChange = { valueState.value = it },
-        label = { Text(text = placeholder) },
+        label = { Text(text = label) },
+        placeholder = { Text(text = placeholder) },
         maxLines = 1,
         singleLine = true,
         keyboardOptions = KeyboardOptions(keyboardType = keyboardType, imeAction = imeAction),

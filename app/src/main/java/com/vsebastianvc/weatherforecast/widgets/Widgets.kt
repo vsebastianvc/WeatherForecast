@@ -1,9 +1,11 @@
 package com.vsebastianvc.weatherforecast.widgets
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.CornerSize
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
@@ -16,6 +18,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import coil.compose.rememberImagePainter
@@ -37,7 +40,7 @@ fun HumidityWindPressureRow(weatherItem: WeatherItem, isMetric: Boolean) {
         Row(modifier = Modifier.padding(4.dp)) {
             Icon(
                 painter = painterResource(
-                    id = R.drawable.humidity
+                    id = R.drawable.ic_humidity
                 ),
                 contentDescription = "humidity icon",
                 modifier = Modifier.size(20.dp)
@@ -51,7 +54,7 @@ fun HumidityWindPressureRow(weatherItem: WeatherItem, isMetric: Boolean) {
         Row(modifier = Modifier.padding(4.dp)) {
             Icon(
                 painter = painterResource(
-                    id = R.drawable.pressure
+                    id = R.drawable.ic_pressure
                 ),
                 contentDescription = "pressure icon",
                 modifier = Modifier.size(20.dp)
@@ -65,7 +68,7 @@ fun HumidityWindPressureRow(weatherItem: WeatherItem, isMetric: Boolean) {
         Row(modifier = Modifier.padding(4.dp)) {
             Icon(
                 painter = painterResource(
-                    id = R.drawable.wind
+                    id = R.drawable.ic_wind
                 ),
                 contentDescription = "wind icon",
                 modifier = Modifier.size(20.dp)
@@ -90,7 +93,7 @@ fun SunsetSunriseRow(weatherItem: WeatherItem) {
         Row(modifier = Modifier.padding(4.dp)) {
             Icon(
                 painter = painterResource(
-                    id = R.drawable.sunrise
+                    id = R.drawable.ic_sunrise
                 ),
                 contentDescription = "sunrise icon",
                 modifier = Modifier.size(30.dp)
@@ -104,7 +107,7 @@ fun SunsetSunriseRow(weatherItem: WeatherItem) {
         Row(modifier = Modifier.padding(4.dp)) {
             Icon(
                 painter = painterResource(
-                    id = R.drawable.sunset
+                    id = R.drawable.ic_sunset
                 ),
                 contentDescription = "sunset icon",
                 modifier = Modifier.size(30.dp)
@@ -125,33 +128,35 @@ fun WeatherDetailRow(weather: WeatherItem) {
         modifier = Modifier
             .padding(3.dp)
             .fillMaxWidth(),
-        shape = CircleShape.copy(topEnd = CornerSize(6.dp)),
-        color = Color.White
+        shape = RoundedCornerShape(20.dp),
+        color = Color.White,
+        border = BorderStroke(1.dp, Color.Black)
     ) {
         Row(
             modifier = Modifier.fillMaxWidth(),
             verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.SpaceBetween
+            horizontalArrangement = Arrangement.Start
         ) {
             Text(
                 text = formatDate(weather.dt).split(",").first(),
-                modifier = Modifier.padding(start = 5.dp)
+                modifier = Modifier.padding(horizontal = 15.dp)
             )
-
+            Spacer(modifier = Modifier.weight(1f))
             WeatherStateImage(imageUrl = imageUrl)
-
+            Spacer(modifier = Modifier.weight(1f))
             Surface(
-                modifier = Modifier.padding(0.dp),
+                modifier = Modifier.padding(horizontal = 4.dp),
                 shape = CircleShape,
                 color = Color(0xFFFFC400)
             ) {
                 Text(
                     text = weather.weather[0].description,
                     modifier = Modifier.padding(4.dp),
-                    style = MaterialTheme.typography.caption
+                    style = MaterialTheme.typography.caption,
+                    textAlign = TextAlign.Center
                 )
             }
-
+            Spacer(modifier = Modifier.weight(1f))
             Text(text = buildAnnotatedString {
                 withStyle(
                     style = SpanStyle(
@@ -169,7 +174,7 @@ fun WeatherDetailRow(weather: WeatherItem) {
                 ) {
                     append(formatDecimals(weather.temp.min) + "°")
                 }
-            })
+            }, modifier = Modifier.padding(end = 15.dp))
         }
     }
 }
