@@ -1,0 +1,13 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="231dp"
+    android:height="231dp"
+    android:viewportWidth="231"
+    android:viewportHeight="231">
+  <path
+      android:fillColor="#B0B5B4"
+      android:pathData="M198.5,0h-17v83h-132V0h-49v231h230V32.67L198.5,0zM197.5,199h-165v-83h165V199z"/>
+  <path
+      android:fillColor="#B0B5B4"
+      android:pathData="M131.5,0h33v66h-33z"/>
+</vector>
+<!-- https://www.svgrepo.com/svg/2888/save -->

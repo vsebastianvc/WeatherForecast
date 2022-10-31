@@ -1,0 +1,13 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="32dp"
+    android:height="32dp"
+    android:viewportWidth="32"
+    android:viewportHeight="32">
+  <path
+      android:fillColor="#B0B5B4"
+      android:pathData="M17,18.184L17,13.816a3.001,3.001 0,1 0,-2 0v4.369a3,3 0,1 0,2 0ZM16,10a1,1 0,1 1,-1 1A1.001,1.001 0,0 1,16 10ZM16,22a1,1 0,1 1,1 -1A1.001,1.001 0,0 1,16 22Z"/>
+  <path
+      android:fillColor="#B0B5B4"
+      android:pathData="M30.414,17.414a2,2 0,0 0,0 -2.828L24.627,8.799l2.901,-2.863a2.002,2.002 0,1 0,-1.442 -1.387L23.213,7.385 17.414,1.586a2,2 0,0 0,-2.828 0L8.799,7.373 5.937,4.472A2.002,2.002 0,1 0,4.55 5.914l2.835,2.874L1.586,14.586a2,2 0,0 0,0 2.828l5.799,5.799L4.55,26.086a1.998,1.998 0,1 0,1.387 1.442l2.862,-2.901 5.787,5.787a2,2 0,0 0,2.828 0l5.799,-5.799 2.873,2.836a1.998,1.998 0,1 0,1.442 -1.387l-2.901,-2.863ZM16,29 L3,16 16,3 29,16Z"/>
+</vector>
+<!-- https://www.svgrepo.com/svg/340364/gateway-api -->

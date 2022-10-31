@@ -6,7 +6,6 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
@@ -19,7 +18,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -27,8 +25,10 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.vsebastianvc.weatherforecast.R
-import com.vsebastianvc.weatherforecast.model.Favorite
+import com.vsebastianvc.weatherforecast.model.autocomplete.AccuWeatherCity
 import com.vsebastianvc.weatherforecast.navigation.WeatherScreens
+import com.vsebastianvc.weatherforecast.utils.getLocation
+import com.vsebastianvc.weatherforecast.utils.toJson
 import com.vsebastianvc.weatherforecast.widgets.WeatherAppBar
 
 @Composable
@@ -38,7 +38,7 @@ fun FavoriteScreen(
 ) {
     Scaffold(topBar = {
         WeatherAppBar(
-            title = "Favorite Cities",
+            title = stringResource(id = R.string.favorite_cities),
             icon = Icons.Default.ArrowBack,
             isMainScreen = false,
             navController = navController
@@ -76,7 +76,7 @@ fun FavoriteScreen(
 
 @Composable
 fun CityRow(
-    favorite: Favorite,
+    accuWeatherCity: AccuWeatherCity,
     navController: NavController,
     favoriteViewModel: FavoriteViewModel
 ) {
@@ -85,10 +85,10 @@ fun CityRow(
             .padding(start = 15.dp, end = 15.dp, top = 5.dp, bottom = 5.dp)
             .fillMaxWidth()
             .height(50.dp)
-            .clickable { navController.navigate(WeatherScreens.MainScreen.name + "/${favorite.city}") },
-        shape = RoundedCornerShape(20.dp),
+            .clickable { navController.navigate(WeatherScreens.MainScreen.name + "/${accuWeatherCity.toJson()}") },
+        shape = MaterialTheme.shapes.medium,
         elevation = 2.dp,
-        border = BorderStroke(1.dp, Color.Black)
+        border = BorderStroke(1.dp, MaterialTheme.colors.onSurface)
     ) {
         Row(
             modifier = Modifier
@@ -98,22 +98,21 @@ fun CityRow(
             horizontalArrangement = Arrangement.SpaceEvenly
         ) {
             Text(
-                text = "${favorite.city},${favorite.country}",
-                fontWeight = FontWeight.ExtraBold,
-                fontSize = 16.sp
+                text = accuWeatherCity.getLocation(),
+                style = MaterialTheme.typography.subtitle1
             )
             Spacer(modifier = Modifier.weight(1f))
             Icon(
-                imageVector = Icons.Rounded.Delete, contentDescription = "Delete",
+                imageVector = Icons.Rounded.Delete,
+                contentDescription = stringResource(id = R.string.delete_description),
                 modifier = Modifier
                     .padding(end = 20.dp)
                     .clickable {
-                        favoriteViewModel.deleteFavorite(favorite)
+                        favoriteViewModel.deleteFavorite(accuWeatherCity)
                     },
-                tint = Color.Red.copy(alpha = 0.3f),
+                tint = MaterialTheme.colors.error,
             )
         }
-
     }
 }
 

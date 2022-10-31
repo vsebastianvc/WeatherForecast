@@ -1,0 +1,32 @@
+
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="32dp"
+    android:height="32dp"
+    android:viewportWidth="32"
+    android:viewportHeight="32">
+  <path
+      android:fillColor="#B0B5B4"
+      android:pathData="M13,30H9a2.003,2.003 0,0 1,-2 -2V20H9v8h4V20h2v8A2.003,2.003 0,0 1,13 30Z"/>
+  <path
+      android:fillColor="#B0B5B4"
+      android:pathData="M25,20l-1.75,0l-2.25,9.031l-2.208,-9.031l-1.792,0l2.5,10l3,0l2.5,-10z"/>
+  <path
+      android:fillColor="#B0B5B4"
+      android:pathData="M15,2h2v5h-2z"/>
+  <path
+      android:fillColor="#B0B5B4"
+      android:pathData="M21.687,8.899l3.506,-3.506l1.414,1.414l-3.506,3.506z"/>
+  <path
+      android:fillColor="#B0B5B4"
+      android:pathData="M25,15h5v2h-5z"/>
+  <path
+      android:fillColor="#B0B5B4"
+      android:pathData="M2,15h5v2h-5z"/>
+  <path
+      android:fillColor="#B0B5B4"
+      android:pathData="M5.394,6.808l1.414,-1.414l3.506,3.506l-1.414,1.414z"/>
+  <path
+      android:fillColor="#B0B5B4"
+      android:pathData="M22,17H20V16a4,4 0,0 0,-8 0v1H10V16a6,6 0,0 1,12 0Z"/>
+</vector>
+    <!--https://www.svgrepo.com/svg/341277/uv-index-alt-->

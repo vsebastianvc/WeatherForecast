@@ -1,26 +1,26 @@
 package com.vsebastianvc.weatherforecast.data
 
 import androidx.room.*
-import com.vsebastianvc.weatherforecast.model.Favorite
+import com.vsebastianvc.weatherforecast.model.autocomplete.AccuWeatherCity
 import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface WeatherDao {
-    @Query("SELECT * from fav_tbl")
-    fun getFavorites(): Flow<List<Favorite>>
+    @Query("SELECT * from city_tbl")
+    fun getFavorites(): Flow<List<AccuWeatherCity>>
 
-    @Query("SELECT * from fav_tbl where city =:city")
-    suspend fun getFavById(city: String): Favorite
+    @Query("SELECT * from city_tbl where location_key =:locationKey")
+    suspend fun getFavById(locationKey: String): AccuWeatherCity
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertFavorite(favorite: Favorite)
+    suspend fun insertFavorite(accuWeatherCity: AccuWeatherCity)
 
     @Update(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun updateFavorite(favorite: Favorite)
+    suspend fun updateFavorite(accuWeatherCity: AccuWeatherCity)
 
-    @Query("DELETE from fav_tbl")
+    @Query("DELETE from city_tbl")
     suspend fun deleteAllFavorites()
 
     @Delete
-    suspend fun deleteFavorite(favorite: Favorite)
+    suspend fun deleteFavorite(accuWeatherCity: AccuWeatherCity)
 }
