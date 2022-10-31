@@ -7,6 +7,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
+import com.vsebastianvc.weatherforecast.model.autocomplete.AccuWeatherCity
 import com.vsebastianvc.weatherforecast.screens.about.AboutScreen
 import com.vsebastianvc.weatherforecast.screens.favorites.FavoriteScreen
 import com.vsebastianvc.weatherforecast.screens.main.MainScreen
@@ -14,6 +15,8 @@ import com.vsebastianvc.weatherforecast.screens.main.MainViewModel
 import com.vsebastianvc.weatherforecast.screens.search.SearchScreen
 import com.vsebastianvc.weatherforecast.screens.settings.SettingsScreen
 import com.vsebastianvc.weatherforecast.screens.splash.WeatherSplashScreen
+import com.vsebastianvc.weatherforecast.utils.Constants
+import com.vsebastianvc.weatherforecast.utils.fromJson
 
 @Composable
 fun WeatherNavigation() {
@@ -29,13 +32,17 @@ fun WeatherNavigation() {
         val route = WeatherScreens.MainScreen.name
         composable(
             "$route/{city}", arguments = listOf(
-                navArgument(name = "city") {
+                navArgument(name = Constants.CITY_KEY) {
                     type = NavType.StringType
                 })
         ) { city ->
-            city.arguments?.getString("city").let {
+            city.arguments?.getString(Constants.CITY_KEY)?.let { jsonString ->
                 val mainViewModel = hiltViewModel<MainViewModel>()
-                MainScreen(navController = navController, mainViewModel, city = it)
+                MainScreen(
+                    navController = navController,
+                    mainViewModel,
+                    accuWeatherCity = jsonString.fromJson(AccuWeatherCity::class.java)
+                )
             }
         }
 

@@ -4,7 +4,6 @@ import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Surface
@@ -17,13 +16,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.vsebastianvc.weatherforecast.R
@@ -64,16 +61,16 @@ fun SettingsScreen(
                 style = MaterialTheme.typography.h6
             )
             Surface(
-                shape = RoundedCornerShape(24.dp),
+                shape = MaterialTheme.shapes.large,
                 elevation = 4.dp,
                 modifier = Modifier
                     .wrapContentSize()
                     .padding(vertical = 10.dp),
-                border = BorderStroke(1.dp, Color.Black)
+                border = BorderStroke(1.dp, MaterialTheme.colors.onSurface)
             ) {
                 Row(
                     modifier = Modifier
-                        .clip(shape = RoundedCornerShape(24.dp))
+                        .clip(shape = MaterialTheme.shapes.large)
                         .background(Color.Gray),
                     horizontalArrangement = Arrangement.Center,
                     verticalAlignment = Alignment.CenterVertically
@@ -83,18 +80,16 @@ fun SettingsScreen(
                         Text(
                             text = buildAnnotatedString {
                                 withStyle(
-                                    style = SpanStyle(
+                                    style = MaterialTheme.typography.body1.toSpanStyle().copy(
                                         fontWeight = FontWeight.Bold,
-                                        fontSize = 16.sp
                                     )
                                 ) {
                                     append(unitText[0] + "\n")
                                 }
 
                                 withStyle(
-                                    style = SpanStyle(
+                                    style = MaterialTheme.typography.body2.toSpanStyle().copy(
                                         fontWeight = FontWeight.Normal,
-                                        fontSize = 14.sp
                                     )
                                 ) {
                                     append("${unitText[1]} ${unitText[2]}")
@@ -102,7 +97,7 @@ fun SettingsScreen(
                             },
                             color = Color.White,
                             modifier = Modifier
-                                .clip(shape = RoundedCornerShape(24.dp))
+                                .clip(shape = MaterialTheme.shapes.large)
                                 .clickable {
                                     choiceState = text
                                     settingsViewModel.setUnit(unit = text)

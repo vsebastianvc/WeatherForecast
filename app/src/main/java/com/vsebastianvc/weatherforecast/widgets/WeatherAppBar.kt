@@ -1,6 +1,5 @@
 package com.vsebastianvc.weatherforecast.widgets
 
-import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -14,34 +13,32 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
-import com.vsebastianvc.weatherforecast.model.Favorite
+import com.vsebastianvc.weatherforecast.model.autocomplete.AccuWeatherCity
 import com.vsebastianvc.weatherforecast.navigation.WeatherScreens
 import com.vsebastianvc.weatherforecast.screens.favorites.FavoriteViewModel
+import com.vsebastianvc.weatherforecast.utils.Constants
 
 @Composable
 fun WeatherAppBar(
     title: String = "Title",
+    accuWeatherCity: AccuWeatherCity = Constants.DEFAULT_CITY,
     icon: ImageVector? = null,
     isMainScreen: Boolean = true,
     elevation: Dp = 0.dp,
     navController: NavController,
     favoriteViewModel: FavoriteViewModel = hiltViewModel(),
     onAddActionClicked: () -> Unit = {},
+    onFavoritesClicked: () -> Unit = {},
     onButtonClicked: () -> Unit = {}
 ) {
     val showDialog = remember {
         mutableStateOf(false)
     }
-
-    val context = LocalContext.current
 
     if (showDialog.value) {
         ShowSettingDropDownMenu(showDialog = showDialog, navController = navController)
@@ -52,7 +49,7 @@ fun WeatherAppBar(
             Text(
                 text = title,
                 color = MaterialTheme.colors.onSecondary,
-                style = TextStyle(fontWeight = FontWeight.Bold, fontSize = 16.sp)
+                style = MaterialTheme.typography.h6
             )
         },
         actions = {
@@ -82,32 +79,20 @@ fun WeatherAppBar(
             if (isMainScreen) {
                 val isAlreadyFavList =
                     favoriteViewModel.favList.collectAsState().value.filter { item ->
-                        (item.city == title.split(",")[0])
+                        item.key == accuWeatherCity.key
                     }
                 if (isAlreadyFavList.isEmpty()) {
                     Icon(
                         imageVector = Icons.Default.Favorite,
                         contentDescription = "Favorite Icon",
                         modifier = Modifier
-                            .scale(0.9f)
-                            .padding(start = 8.dp)
+                            .scale(1f)
+                            .padding(start = 15.dp)
                             .clickable {
-                                val dataList = title.split(",")
                                 favoriteViewModel
-                                    .insertFavorite(
-                                        Favorite(
-                                            city = dataList[0],
-                                            country = dataList[1]
-                                        )
-                                    )
+                                    .insertFavorite(accuWeatherCity = accuWeatherCity)
                                     .run {
-                                        Toast
-                                            .makeText(
-                                                context,
-                                                "Added To Favorites",
-                                                Toast.LENGTH_SHORT
-                                            )
-                                            .show()
+                                        onFavoritesClicked.invoke()
                                     }
                             },
                         tint = Color.Red.copy(alpha = 0.6f)
@@ -115,7 +100,6 @@ fun WeatherAppBar(
                 } else {
                     Box {}
                 }
-
             }
         },
         backgroundColor = Color.Transparent,
@@ -141,7 +125,7 @@ fun ShowSettingDropDownMenu(showDialog: MutableState<Boolean>, navController: Na
                 expanded = false
             }, modifier = Modifier
                 .width(140.dp)
-                .background(Color.White)
+                .background(MaterialTheme.colors.surface.copy(alpha = 0.6f))
         ) {
             items.forEachIndexed { _, text ->
                 DropdownMenuItem(onClick = {
@@ -154,7 +138,7 @@ fun ShowSettingDropDownMenu(showDialog: MutableState<Boolean>, navController: Na
                             "Settings" -> Icons.Default.Settings
                             else -> Icons.Default.Info
                         }, contentDescription = null,
-                        tint = Color.LightGray
+                        tint = MaterialTheme.colors.onSurface
                     )
                     Text(
                         text = text,
@@ -169,7 +153,7 @@ fun ShowSettingDropDownMenu(showDialog: MutableState<Boolean>, navController: Na
                                     }
                                 )
                             },
-                        fontWeight = FontWeight.W300
+                        fontWeight = FontWeight.Light
                     )
                 }
             }
