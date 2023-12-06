@@ -1,11 +1,18 @@
 package com.vsebastianvc.weatherforecast.screens.about
 
 import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.ExperimentalFoundationApi
-import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.GridCells
-import androidx.compose.foundation.lazy.LazyVerticalGrid
-import androidx.compose.material.*
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.material.Card
+import androidx.compose.material.Divider
+import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Scaffold
+import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.runtime.Composable
@@ -26,7 +33,7 @@ import com.vsebastianvc.weatherforecast.widgets.WeatherAppBar
 val listOfTechnologies: List<Pair<String, Int>> = listOf(
     Pair("Kotlin", R.drawable.ic_kotlin),
     Pair("JetPack Compose", R.drawable.ic_compose),
-    Pair("AccuWeather", R.drawable.ic_accuweather),
+    Pair("AccuWeather SDK", R.drawable.ic_accuweather),
     Pair("MVVM", R.drawable.ic_architecture),
     Pair("Navigation Graph", R.drawable.ic_navigation),
     Pair("Coroutines", R.drawable.ic_coroutines),
@@ -40,42 +47,44 @@ val listOfTechnologies: List<Pair<String, Int>> = listOf(
 
 @Composable
 fun AboutScreen(navController: NavController) {
-    Scaffold(topBar = {
-        WeatherAppBar(
-            title = stringResource(id = R.string.about),
-            icon = Icons.Default.ArrowBack,
-            isMainScreen = false,
-            navController = navController
-        ) {
-            navController.popBackStack()
+    Scaffold(
+        topBar = {
+            WeatherAppBar(
+                title = stringResource(id = R.string.about),
+                icon = Icons.Default.ArrowBack,
+                isMainScreen = false,
+                navController = navController
+            ) {
+                navController.popBackStack()
+            }
+        },
+        content = { padding ->
+            Column(modifier = Modifier.fillMaxWidth().padding(padding)) {
+                Text(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(vertical = 10.dp),
+                    text = stringResource(R.string.technologies_used_on_this_app),
+                    style = MaterialTheme.typography.h6,
+                    textAlign = TextAlign.Center
+                )
+                Divider(
+                    modifier = Modifier.padding(bottom = 10.dp, end = 5.dp),
+                    thickness = 2.dp,
+                    startIndent = 5.dp,
+                    color = MaterialTheme.colors.onSurface.copy(alpha = 0.6f)
+                )
+                AboutContent()
+            }
         }
-    }) {
-        Column {
-            Text(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(vertical = 10.dp),
-                text = stringResource(R.string.technologies_used_on_this_app),
-                style = MaterialTheme.typography.h6,
-                textAlign = TextAlign.Center
-            )
-            Divider(
-                modifier = Modifier.padding(bottom = 10.dp, end = 5.dp),
-                thickness = 2.dp,
-                startIndent = 5.dp,
-                color = MaterialTheme.colors.onSurface.copy(alpha = 0.6f)
-            )
-            AboutContent()
-        }
-    }
+    )
 }
 
-@OptIn(ExperimentalFoundationApi::class)
 @Preview(showBackground = true)
 @Composable
 fun AboutContent(technologies: List<Pair<String, Int>> = listOfTechnologies) {
     LazyVerticalGrid(
-        cells = GridCells.Fixed(3)
+        columns = GridCells.Fixed(3)
     ) {
         items(technologies.size) { index ->
             Column(horizontalAlignment = Alignment.CenterHorizontally) {
