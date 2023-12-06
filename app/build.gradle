@@ -6,12 +6,12 @@ plugins {
 }
 
 android {
-    compileSdk 32
+    compileSdk 34
 
     defaultConfig {
         applicationId "com.vsebastianvc.weatherforecast"
         minSdk 26
-        targetSdk 32
+        targetSdk 34
         versionCode 1
         versionName "1.0"
 
@@ -28,24 +28,24 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
     }
     kotlinOptions {
-        jvmTarget = '1.8'
-        useIR = true
+        jvmTarget = "17"
     }
     buildFeatures {
-        compose true
+        compose = true
     }
     composeOptions {
-        kotlinCompilerExtensionVersion compose_version
+        kotlinCompilerExtensionVersion compose_compiler_extension_version
     }
     packagingOptions {
         resources {
             excludes += '/META-INF/{AL2.0,LGPL2.1}'
         }
     }
+    namespace 'com.vsebastianvc.weatherforecast'
 }
 
 dependencies {
@@ -55,6 +55,7 @@ dependencies {
     kapt("com.google.dagger:hilt-android-compiler:$hilt_version")
     kapt("androidx.hilt:hilt-compiler:$hilt_compiler_version")
     implementation("androidx.hilt:hilt-navigation-compose:$hilt_compiler_version")
+
 
     // Coroutines
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutines_version"
@@ -75,6 +76,7 @@ dependencies {
     implementation "androidx.room:room-runtime:$room_version"
     annotationProcessor "androidx.room:room-compiler:$compiler_room_version"
     // To use Kotlin annotation processing tool (kapt) MUST HAVE!
+    //noinspection KaptUsageInsteadOfKsp
     kapt("androidx.room:room-compiler:$room_version")
     implementation "androidx.room:room-ktx:$room_version"
 
@@ -92,11 +94,11 @@ dependencies {
 
     // Testing
     testImplementation("junit:junit:$junit_version")
-    testImplementation ("org.mockito:mockito-core:$mockito_version")
-    testImplementation ("org.jetbrains.kotlinx:kotlinx-coroutines-test:$coroutines_test_version")
-    androidTestImplementation ("androidx.arch.core:core-testing:$core_test_version")
+    testImplementation("org.mockito:mockito-core:$mockito_version")
+    testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:$coroutines_test_version")
+    androidTestImplementation("androidx.arch.core:core-testing:$core_test_version")
     androidTestImplementation("androidx.test.ext:junit:$androidx_junit_version")
     androidTestImplementation("androidx.test.espresso:espresso-core:$espression_core_version")
-    androidTestImplementation "androidx.compose.ui:ui-test-junit4:$compose_version"
-    debugImplementation "androidx.compose.ui:ui-tooling:$compose_version"
+    androidTestImplementation ("androidx.compose.ui:ui-test-junit4:$compose_version")
+    debugImplementation ("androidx.compose.ui:ui-tooling:$compose_version")
 }

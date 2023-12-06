@@ -40,7 +40,7 @@ interface AccuWeatherApi {
 
     @GET(value = GET_LOCATION_FROM_TEXT)
     suspend fun getLocationFromSearch(
-        @Query(KEY_STROKE) key_stroke: String?,
+        @Query(KEY_STROKE) keyStroke: String?,
         @Query(LANGUAGE) language: String = EN_US_LANGUAGE,
         @Query(API_KEY) apiKey: String = Constants.ACCUWEATHER_API_KEY
     ): List<AccuWeatherCity>

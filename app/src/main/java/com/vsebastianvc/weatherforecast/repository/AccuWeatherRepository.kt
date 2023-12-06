@@ -32,7 +32,7 @@ class AccuWeatherRepository @Inject constructor(private val api: AccuWeatherApi)
 
     suspend fun getLocationFromSearch(city: String): DataOrException<List<AccuWeatherCity>, Boolean, Exception> {
         val response = try {
-            api.getLocationFromSearch(key_stroke = city)
+            api.getLocationFromSearch(keyStroke = city)
         } catch (e: Exception) {
             return DataOrException(e = e)
         }

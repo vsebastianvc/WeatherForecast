@@ -3,10 +3,23 @@ package com.vsebastianvc.weatherforecast.screens.favorites
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material.*
+import androidx.compose.material.Card
+import androidx.compose.material.Icon
+import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Scaffold
+import androidx.compose.material.Surface
+import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.rounded.Delete
@@ -36,42 +49,44 @@ fun FavoriteScreen(
     navController: NavController,
     favoriteViewModel: FavoriteViewModel = hiltViewModel()
 ) {
-    Scaffold(topBar = {
-        WeatherAppBar(
-            title = stringResource(id = R.string.favorite_cities),
-            icon = Icons.Default.ArrowBack,
-            isMainScreen = false,
-            navController = navController
-        ) { navController.popBackStack() }
-    }) {
-        Surface(
-            modifier = Modifier
-                .padding(horizontal = 5.dp, vertical = 10.dp)
-                .fillMaxWidth()
-        ) {
-            Column(
-                verticalArrangement = Arrangement.Center,
-                horizontalAlignment = Alignment.CenterHorizontally
+    Scaffold(
+        topBar = {
+            WeatherAppBar(
+                title = stringResource(id = R.string.favorite_cities),
+                icon = Icons.Default.ArrowBack,
+                isMainScreen = false,
+                navController = navController
+            ) { navController.popBackStack() }
+        },
+        content = { padding ->
+            Surface(
+                modifier = Modifier
+                    .padding(padding)
+                    .padding(horizontal = 5.dp, vertical = 10.dp)
+                    .fillMaxWidth()
             ) {
-                val list = favoriteViewModel.favList.collectAsState().value
-                if (list.isNotEmpty()) {
-                    LazyColumn {
-                        items(items = list) {
-                            CityRow(
-                                it,
-                                navController = navController,
-                                favoriteViewModel = favoriteViewModel
-                            )
+                Column(
+                    verticalArrangement = Arrangement.Center,
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    val list = favoriteViewModel.favList.collectAsState().value
+                    if (list.isNotEmpty()) {
+                        LazyColumn {
+                            items(items = list) {
+                                CityRow(
+                                    it,
+                                    navController = navController,
+                                    favoriteViewModel = favoriteViewModel
+                                )
+                            }
                         }
+                    } else {
+                        NoFavoriteCities()
                     }
-                } else {
-                    NoFavoriteCities()
                 }
             }
-
         }
-    }
-
+    )
 }
 
 @Composable

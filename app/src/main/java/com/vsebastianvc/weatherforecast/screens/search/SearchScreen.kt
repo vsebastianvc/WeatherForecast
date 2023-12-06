@@ -3,17 +3,36 @@ package com.vsebastianvc.weatherforecast.screens.search
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.isSystemInDarkTheme
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CornerSize
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material.*
+import androidx.compose.material.Card
+import androidx.compose.material.Divider
+import androidx.compose.material.MaterialTheme
+import androidx.compose.material.OutlinedTextField
+import androidx.compose.material.Scaffold
+import androidx.compose.material.Surface
+import androidx.compose.material.Text
+import androidx.compose.material.TextFieldDefaults
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.produceState
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
@@ -41,85 +60,88 @@ import retrofit2.HttpException
 
 @Composable
 fun SearchScreen(navController: NavController, searchViewModel: SearchViewModel = hiltViewModel()) {
-    Scaffold(topBar = {
-        WeatherAppBar(
-            title = stringResource(R.string.search),
-            navController = navController,
-            icon = Icons.Default.ArrowBack,
-            isMainScreen = false
-        ) {
-            navController.popBackStack()
-        }
-    }) {
-
-        var searchCity by remember {
-            mutableStateOf("")
-        }
-
-        Surface {
-            Column(
-                verticalArrangement = Arrangement.Center,
-                horizontalAlignment = Alignment.CenterHorizontally
+    Scaffold(
+        topBar = {
+            WeatherAppBar(
+                title = stringResource(R.string.search),
+                navController = navController,
+                icon = Icons.Default.ArrowBack,
+                isMainScreen = false
             ) {
-                SearchBar { city ->
-                    searchCity = city
-                }
+                navController.popBackStack()
+            }
+        },
+        content = { padding ->
+            var searchCity by remember {
+                mutableStateOf("")
+            }
 
-                if (searchCity != "") {
-                    if (!isInternetAvailable(LocalContext.current)) {
-                        ErrorScreen(
-                            id = R.drawable.ic_no_wifi,
-                            mainMessage = R.string.no_connection,
-                            secondMessage = R.string.please_try_check_your_connection
-                        )
-                    } else {
-                        val cityData =
-                            produceState<DataOrException<List<AccuWeatherCity>, Boolean, Exception>>(
-                                initialValue = DataOrException(loading = true)
-                            ) {
-                                value = searchViewModel.getLocationFromText(city = searchCity)
-                            }.value
+            Surface(modifier = Modifier.padding(padding)) {
+                Column(
+                    verticalArrangement = Arrangement.Center,
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    SearchBar { city ->
+                        searchCity = city
+                    }
 
-                        if (cityData.loading == true) {
-                            Loading()
-                        } else if (cityData.data != null) {
-                            Divider(
-                                modifier = Modifier.padding(
-                                    start = 15.dp,
-                                    end = 15.dp,
-                                    top = 15.dp
-                                ),
-                                thickness = 3.dp,
-                                color = MaterialTheme.colors.onSurface
+                    if (searchCity != "") {
+                        if (!isInternetAvailable(LocalContext.current)) {
+                            ErrorScreen(
+                                id = R.drawable.ic_no_wifi,
+                                mainMessage = R.string.no_connection,
+                                secondMessage = R.string.please_try_check_your_connection
                             )
-                            ListOfCities(list = cityData.data!!, navController = navController)
-                        } else if (cityData.e != null) {
-                            when (val error = cityData.e) {
-                                is HttpException -> {
-                                    if (error.code() == 503) {
+                        } else {
+                            val cityData =
+                                produceState<DataOrException<List<AccuWeatherCity>, Boolean, Exception>>(
+                                    initialValue = DataOrException(loading = true)
+                                ) {
+                                    value = searchViewModel.getLocationFromText(city = searchCity)
+                                }.value
+
+                            if (cityData.loading == true) {
+                                Loading()
+                            } else if (cityData.data != null) {
+                                Divider(
+                                    modifier = Modifier.padding(
+                                        start = 15.dp,
+                                        end = 15.dp,
+                                        top = 15.dp
+                                    ),
+                                    thickness = 3.dp,
+                                    color = MaterialTheme.colors.onSurface
+                                )
+                                ListOfCities(list = cityData.data!!, navController = navController)
+                            } else if (cityData.e != null) {
+                                when (val error = cityData.e) {
+                                    is HttpException -> {
+                                        if (error.code() == 503) {
+                                            ErrorScreen(
+                                                id = R.drawable.ic_sorry,
+                                                mainMessage = R.string.free_app,
+                                                secondMessage = R.string.please_try_again_later
+                                            )
+                                        }
+                                    }
+
+                                    else -> {
                                         ErrorScreen(
-                                            id = R.drawable.ic_sorry,
-                                            mainMessage = R.string.free_app,
+                                            id = R.drawable.ic_sad,
+                                            mainMessage = R.string.oops_something_got_lost_on_internet,
                                             secondMessage = R.string.please_try_again_later
                                         )
                                     }
                                 }
-                                else -> {
-                                    ErrorScreen(
-                                        id = R.drawable.ic_sad,
-                                        mainMessage = R.string.oops_something_got_lost_on_internet,
-                                        secondMessage = R.string.please_try_again_later
-                                    )
-                                }
                             }
                         }
+                    } else {
+                        Box {}
                     }
-                } else {
-                    Box {}
                 }
             }
         }
-    }
+    )
 }
 
 @OptIn(ExperimentalComposeUiApi::class)

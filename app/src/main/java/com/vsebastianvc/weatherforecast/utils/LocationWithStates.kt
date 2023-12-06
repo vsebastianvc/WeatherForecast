@@ -5,7 +5,7 @@ enum class LocationWithStates {
 
     companion object {
         fun isSupported(countryId: String): Boolean =
-            values()
+            entries
                 .asSequence()
                 .filter { it.name == countryId }
                 .any()
